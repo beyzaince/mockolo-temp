@@ -7,7 +7,7 @@ let package = Package(
         .macOS(.v10_15),
     ],
     products: [
-        .executable(name: "mockolo", targets: ["Mockolo"]),
+        .library(name: "mockolo", targets: ["Mockolo"]),
         .library(name: "MockoloFramework", targets: ["MockoloFramework"]),
         ],
     dependencies: [
@@ -15,7 +15,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.2"),
     ],
     targets: [
-        .executableTarget(
+        .target(
             name: "Mockolo",
             dependencies: [
                 "MockoloFramework",

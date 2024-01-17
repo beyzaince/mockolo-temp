@@ -53,37 +53,10 @@ final class ParamModel: Model {
     var underlyingName: String {
         return "_\(name)"
     }
-
-    /// - Parameters:
-    ///     - eraseType:
-    ///         If other initializers in decl has same name as this param and type is different from each other,
-    ///         please pass `True` to this parameter. Default value is `false`.
-    ///
-    /// ```
-    ///     protocol A {
-    ///         init(param: String)
-    ///         init(param: any Sequence<Character>)
-    ///     }
-    ///     class B: A {
-    ///         var param: Any! // NOTE: type erasing
-    ///         init () {}
-    ///         required init(param: String) {
-    ///           self.param = param
-    ///         }
-    ///         required init(param: any Sequence<Character>) {
-    ///             self.param = param
-    ///         }
-    ///     }
-    /// ```
-    func asInitVarDecl(eraseType: Bool) -> String? {
+    
+    var asVarDecl: String? {
         if self.inInit, self.needVarDecl {
-            let type: `Type`
-            if eraseType {
-                type = Type(.anyType)
-            } else {
-                type = self.type
-            }
-            return applyVarTemplate(type: type)
+            return applyVarTemplate(name: name, type: type)
         }
         return nil
     }

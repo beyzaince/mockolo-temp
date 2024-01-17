@@ -25,7 +25,7 @@ final class ClassModel: Model {
     let identifier: String
     let declType: DeclType
     let entities: [(String, Model)]
-    let initParamCandidates: [VariableModel]
+    let initParamCandidates: [Model]
     let declaredInits: [MethodModel]
     let metadata: AnnotationMetadata?
     
@@ -39,7 +39,7 @@ final class ClassModel: Model {
          attributes: [String],
          offset: Int64,
          metadata: AnnotationMetadata?,
-         initParamCandidates: [VariableModel],
+         initParamCandidates: [Model],
          declaredInits: [MethodModel],
          entities: [(String, Model)]) {
         self.identifier = identifier 

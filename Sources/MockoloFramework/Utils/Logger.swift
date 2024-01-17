@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import os.signpost
 
 public var minLogLevel = 0
 

@@ -24,10 +24,10 @@ final class ArgumentsHistoryModel: Model {
         self.suffix = suffix
         self.isHistoryAnnotated = isHistoryAnnotated
 
-        self.capturableParamNames = capturables.map(\.name.safeName)
-        self.capturableParamTypes = capturables.map(\.type)
+        self.capturableParamNames = capturables.map(path: \.name)
+        self.capturableParamTypes = capturables.map(path: \.type)
         
-        let genericTypeNameList = genericTypeParams.map(\.name)
+        let genericTypeNameList = genericTypeParams.map(path: \.name)
         self.type = Type.toArgumentsHistoryType(with: capturableParamTypes, typeParams: genericTypeNameList)
     }
     

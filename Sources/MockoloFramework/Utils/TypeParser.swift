@@ -22,7 +22,7 @@ fileprivate var validIdentifierChars: CharacterSet = {
     return valid
 }()
 
-public final class `Type` {
+public final class Type {
     let typeName: String
     let cast: String?
     var cachedDefaultVal: String?
@@ -89,7 +89,7 @@ public final class `Type` {
         }
 
         // Use force unwrapped for the underlying type so it doesn't always have to be set in the init (need to allow blank init).
-        if hasClosure || hasExistentialAny {
+        if hasClosure {
             ret = "(\(ret))!"
         } else {
             if isOptional {
@@ -127,10 +127,6 @@ public final class `Type` {
 
     var hasClosure: Bool {
         return typeName.range(of: String.closureArrow) != nil
-    }
-
-    var hasExistentialAny: Bool {
-        return typeName.hasPrefix(.any)
     }
 
     var isEscaping: Bool {
@@ -529,16 +525,16 @@ public final class `Type` {
         if !typeParams.filter({ returnComps.contains($0)}).isEmpty {
             returnAsStr = returnType.typeName
             if returnType.isOptional {
-                displayableReturnType = .anyType + "?"
+                displayableReturnType = .any + "?"
                 returnAsStr.removeLast()
                 asSuffix = "?"
             } else if returnType.isIUO {
-                displayableReturnType = .anyType + "!"
+                displayableReturnType = .any + "!"
                 returnAsStr.removeLast()
             } else if returnType.isSelf {
                 returnAsStr = String.`Self`
             } else {
-                displayableReturnType = .anyType
+                displayableReturnType = .any
             }
 
             if !returnAsStr.isEmpty {
@@ -602,7 +598,7 @@ public final class `Type` {
             let left = ret[ret.startIndex..<closureRng.lowerBound]
             for item in typeParamList {
                 if isEscaping, left.literalComponents.contains(item) {
-                    ret = String.anyType
+                    ret = String.any
                     if isTypeOptional {
                         ret += "?"
                     }
@@ -612,7 +608,7 @@ public final class `Type` {
 
             for item in typeParamList {
                 if ret.literalComponents.contains(item) {
-                    ret = ret.replacingOccurrences(of: item, with: String.anyType)
+                    ret = ret.replacingOccurrences(of: item, with: String.any)
                 }
             }
             return ret
@@ -622,7 +618,7 @@ public final class `Type` {
             }.isEmpty == false
 
             if hasGenericType || isOpaqueType {
-                ret = .anyType
+                ret = .any
                 if isTypeOptional {
                     ret += "?"
                 }

@@ -36,6 +36,9 @@ public protocol Model {
     /// Indicates whether mock generation for this model has been processed
     var processed: Bool { get }
 
+    /// Indicates whether this model can be used as a parameter to an initializer
+    var canBeInitParam: Bool { get }
+
     /// Indicates whether this model maps to an init method
     var isInitializer: Bool { get }
 
@@ -100,6 +103,10 @@ extension Model {
     }
 
     var processed: Bool {
+        return false
+    }
+
+    var canBeInitParam: Bool {
         return false
     }
 

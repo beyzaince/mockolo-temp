@@ -34,8 +34,9 @@ extension ParamModel {
         }
         return result
     }
-
-    func applyVarTemplate(type: `Type`) -> String {
+    
+    func applyVarTemplate(name: String,
+                          type: Type) -> String {
         assert(!type.isUnknown)
         let vardecl = "\(1.tab)private var \(underlyingName): \(type.underlyingType)"
         return vardecl

@@ -29,7 +29,7 @@ extension ClassModel {
                             mockFinal: Bool,
                             enableFuncArgsHistory: Bool,
                             disableCombineDefaultValues: Bool,
-                            initParamCandidates: [VariableModel],
+                            initParamCandidates: [Model],
                             declaredInits: [MethodModel],
                             entities: [(String, Model)]) -> String {
 
@@ -102,7 +102,7 @@ extension ClassModel {
     }
     
     private func extraInitsIfNeeded(
-        initParamCandidates: [VariableModel],
+        initParamCandidates: [Model],
         declaredInits: [MethodModel],
         acl: String,
         declType: DeclType,
@@ -171,18 +171,13 @@ extension ClassModel {
         }
         
         let extraInitParamNames = initParamCandidates.map{$0.name}
-        let extraVarsToDecl = Dictionary(
-            grouping: declaredInitParamsPerInit.flatMap {
-                $0.filter { !extraInitParamNames.contains($0.name) }
-            },
-            by: \.name
-        )
-            .compactMap { (name: String, params: [ParamModel]) in
-                let shouldErase = params.contains { params[0].type.typeName != $0.type.typeName }
-                return params[0].asInitVarDecl(eraseType: shouldErase)
+        let extraVarsToDecl = declaredInitParamsPerInit.flatMap{$0}.compactMap { (p: ParamModel) -> String? in
+            if !extraInitParamNames.contains(p.name) {
+                return p.asVarDecl
             }
-            .sorted()
-            .joined(separator: "\n")
+            return nil
+        }
+        .joined(separator: "\n")
 
         let declaredInitStr = declaredInits.compactMap { (m: MethodModel) -> String? in
             if case let .initKind(required, override) = m.kind, !m.processed {
@@ -191,7 +186,6 @@ extension ClassModel {
                 let genericTypeDeclsStr = m.genericTypeParams.compactMap {$0.render(with: "", encloser: "")}.joined(separator: ", ")
                 let genericTypesStr = genericTypeDeclsStr.isEmpty ? "" : "<\(genericTypeDeclsStr)>"
                 let paramDeclsStr = m.params.compactMap{$0.render(with: "", encloser: "")}.joined(separator: ", ")
-                let suffixStr = m.suffix.isEmpty ? "" : "\(m.suffix) "
 
                 if override {
                     let paramsList = m.params.map { param in
@@ -199,7 +193,7 @@ extension ClassModel {
                     }.joined(separator: ", ")
 
                     return """
-                    \(1.tab)\(modifier)\(mAcl)init\(genericTypesStr)(\(paramDeclsStr)) \(suffixStr){
+                    \(1.tab)\(modifier)\(mAcl)init\(genericTypesStr)(\(paramDeclsStr)) {
                     \(2.tab)super.init(\(paramsList))
                     \(1.tab)}
                     """
@@ -214,7 +208,7 @@ extension ClassModel {
                     }.joined(separator: "\n")
 
                     return """
-                    \(1.tab)\(modifier)\(mAcl)init\(genericTypesStr)(\(paramDeclsStr)) \(suffixStr){
+                    \(1.tab)\(modifier)\(mAcl)init\(genericTypesStr)(\(paramDeclsStr)) {
                     \(paramsAssign)
                     \(1.tab)}
                     """

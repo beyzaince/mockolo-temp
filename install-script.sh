@@ -64,18 +64,16 @@ echo "OUTPUT FILE = ${OUTFILE}"
 
 cd "$SRCDIR"
 rm -rf .build
-case $(uname -s) in
-    Linux*)     swift build --static-swift-stdlib -c release --arch arm64 --arch x86_64
-                cd .build/release;;
-    Darwin*)    swift build -c release --arch arm64 --arch x86_64
-                cd .build/apple/Products/Release;;
-    *)          echo "unknown destination"
-                exit;;
-esac
+swift build -c release --arch arm64 --arch x86_64
+
+cd .build/apple/Products/Release
 
 echo "** Install..."
+cp "$(xcode-select -p)"/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/lib_InternalSwiftSyntaxParser.dylib . 
 
-tar -cvzf "$OUTFILE" "$TARGET"
+install_name_tool -change @rpath/lib_InternalSwiftSyntaxParser.dylib @executable_path/lib_InternalSwiftSyntaxParser.dylib "$TARGET"
+
+tar -cvzf "$OUTFILE" "$TARGET" lib_InternalSwiftSyntaxParser.dylib
 
 mv "$OUTFILE" "$DESTDIR"
 

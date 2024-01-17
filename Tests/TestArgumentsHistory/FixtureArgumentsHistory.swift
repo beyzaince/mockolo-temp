@@ -4,8 +4,8 @@ let argumentsHistoryWithAnnotation = """
 /// \(String.mockAnnotation)(history: fooFunc = true; bazFunc = true)
 protocol Foo {
     func fooFunc(val: Int)
-    func barFunc(for: [Int])
-    func bazFunc(arg: String, default: Float)
+    func barFunc(val: [Int])
+    func bazFunc(arg: String, other: Float)
 }
 """
 
@@ -29,25 +29,25 @@ class FooMock: Foo {
     private(set) var barFuncCallCount = 0
     var barFuncArgValues = [[Int]]()
     var barFuncHandler: (([Int]) -> ())?
-    func barFunc(for: [Int])  {
+    func barFunc(val: [Int])  {
         barFuncCallCount += 1
-        barFuncArgValues.append(`for`)
+        barFuncArgValues.append(val)
         if let barFuncHandler = barFuncHandler {
-            barFuncHandler(`for`)
+            barFuncHandler(val)
         }
-
+        
     }
 
     private(set) var bazFuncCallCount = 0
     var bazFuncArgValues = [(String, Float)]()
     var bazFuncHandler: ((String, Float) -> ())?
-    func bazFunc(arg: String, default: Float)  {
+    func bazFunc(arg: String, other: Float)  {
         bazFuncCallCount += 1
-        bazFuncArgValues.append((arg, `default`))
+        bazFuncArgValues.append((arg, other))
         if let bazFuncHandler = bazFuncHandler {
-            bazFuncHandler(arg, `default`)
+            bazFuncHandler(arg, other)
         }
-
+        
     }
 }
 
@@ -72,24 +72,24 @@ class FooMock: Foo {
 
     private(set) var barFuncCallCount = 0
     var barFuncHandler: (([Int]) -> ())?
-    func barFunc(for: [Int])  {
+    func barFunc(val: [Int])  {
         barFuncCallCount += 1
         if let barFuncHandler = barFuncHandler {
-            barFuncHandler(`for`)
+            barFuncHandler(val)
         }
-
+        
     }
 
     private(set) var bazFuncCallCount = 0
     var bazFuncArgValues = [(String, Float)]()
     var bazFuncHandler: ((String, Float) -> ())?
-    func bazFunc(arg: String, default: Float)  {
+    func bazFunc(arg: String, other: Float)  {
         bazFuncCallCount += 1
-        bazFuncArgValues.append((arg, `default`))
+        bazFuncArgValues.append((arg, other))
         if let bazFuncHandler = bazFuncHandler {
-            bazFuncHandler(arg, `default`)
+            bazFuncHandler(arg, other)
         }
-
+        
     }
 }
 
