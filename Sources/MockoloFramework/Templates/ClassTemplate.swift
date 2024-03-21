@@ -101,14 +101,16 @@ extension ClassModel {
         return template
     }
     
-    private func extraInitsIfNeeded(initParamCandidates: [Model],
-                                    declaredInits: [MethodModel],
-                                    acl: String,
-                                    declType: DeclType,
-                                    overrides: [String: String]?) -> String {
+    private func extraInitsIfNeeded(
+        initParamCandidates: [Model],
+        declaredInits: [MethodModel],
+        acl: String,
+        declType: DeclType,
+        overrides: [String: String]?
+    ) -> String {
         
         let declaredInitParamsPerInit = declaredInits.map { $0.params }
-        
+
         var needParamedInit = false
         var needBlankInit = false
         

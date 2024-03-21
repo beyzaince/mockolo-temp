@@ -21,9 +21,9 @@ This project may contain unstable APIs which may not be ready for general use. S
 
 ## System Requirements
 
-* Swift 5.4 or later
-* Xcode 12.5 or later
-* macOS 11.0 or later
+* Swift 5.7 or later
+* Xcode 14.2 or later
+* macOS 12.0 or later and Linux
 * Support is included for the Swift Package Manager
 
 
@@ -128,28 +128,6 @@ OPTIONS:
   --use-mock-observable   If set, a property wrapper will be used to mock RxSwift Observable variables (default is set to false).
   --use-template-func     If set, a common template function will be called from all functions in mock classes (default is set to false).
   -h, --help              Show help information.
-  ```
-
-
-## Add MockoloFramework to your project
-
-Option 1: SPM
-```swift
-
-dependencies: [
-    .package(url: "https://github.com/uber/mockolo.git", from: "1.8.1"),
-],
-targets: [
-    .target(name: "MyTarget", dependencies: ["MockoloFramework"]),
-]
-
-```
-Option 2: Cocoapods
-```
-target 'MyTarget' do
-  platform :osx, '10.14'
-  pod 'MockoloFramework', '~>1.1.2'
-end
 ```
 
 
@@ -157,12 +135,12 @@ end
 
 The `install-script.sh` will build and package up the `mockolo` binary and other necessary resources in the same bundle.
 
-```
+```sh
 $ ./install-script.sh -h  // see input options
 $ ./install-script.sh -s [source dir] -t mockolo -d [destination dir] -o [output filename].tar.gz
 ```
 
-This will create a tarball for distribution, which contains the `mockolo` executable along with a necessary SwiftSyntax parser dylib (lib_InternalSwiftSyntaxParser.dylib). This allows running `mockolo` without depending on where the dylib lives.
+This will create a tarball for distribution, which contains the `mockolo` executable.
 
 
 
@@ -262,8 +240,8 @@ This will generate the following mock output:
 
 ```swift
 public class FooMock: Foo {
-    typealias T = AnyObject // overriden
-    typealias U = StringProtocol // overriden
+    typealias T = AnyObject // overridden
+    typealias U = StringProtocol // overridden
     typealias W = Any // default placeholder type for typealias
     ...
 }

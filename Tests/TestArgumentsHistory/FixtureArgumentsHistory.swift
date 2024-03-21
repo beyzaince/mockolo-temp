@@ -23,7 +23,7 @@ class FooMock: Foo {
         if let fooFuncHandler = fooFuncHandler {
             fooFuncHandler(val)
         }
-        
+
     }
 
     private(set) var barFuncCallCount = 0
@@ -54,7 +54,6 @@ class FooMock: Foo {
 """
 
 let argumentsHistoryWithAnnotationNotAllFuncCaseMock = """
-
 class FooMock: Foo {
     init() { }
 
@@ -68,7 +67,7 @@ class FooMock: Foo {
         if let fooFuncHandler = fooFuncHandler {
             fooFuncHandler(val)
         }
-        
+
     }
 
     private(set) var barFuncCallCount = 0

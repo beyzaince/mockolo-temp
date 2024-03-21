@@ -44,6 +44,7 @@ extension String {
     static let mockType = "protocol"
     static let unknownVal = "Unknown"
     static let prefix = "prefix"
+    static let anyType = "Any"
     static let any = "Any"
     static let some = "some"
     static let anyObject = "AnyObject"
@@ -53,7 +54,7 @@ extension String {
     static let `open` = "open"
     static let initializer = "init"
     static let argsHistorySuffix = "ArgValues"
-    static let handlerSuffix = "Handler"
+    static let handlerSuffix = "Parameters"
     static let observable = "Observable"
     static let rxObservable = "RxSwift.Observable"
     static let observableLeftAngleBracket = observable + "<"
@@ -88,7 +89,7 @@ extension String {
     static let subjectSuffix = "Subject"
     static let underlyingVarPrefix = "_"
     static let setCallCountSuffix = "SetCallCount"
-    static let callCountSuffix = "CallCount"
+    static let callCountSuffix = "Count"
     static let initializerLeftParen = "init("
     static let `escaping` = "@escaping"
     static let autoclosure = "@autoclosure"
@@ -189,6 +190,11 @@ extension String {
         }
         return !argsMap.isEmpty ? argsMap : nil
     }
+    
+    func deletingPrefix(_ prefix: String) -> String {
+        guard self.hasPrefix(prefix) else { return self }
+        return String(self.dropFirst(prefix.count))
+    }
 }
 
 let separatorsForDisplay = CharacterSet(charactersIn: "<>[] :,()_-.&@#!{}@+\"\'")
@@ -199,7 +205,7 @@ extension StringProtocol {
         return !isEmpty
     }
 
-    var capitlizeFirstLetter: String {
+    var capitalizeFirstLetter: String {
         return prefix(1).capitalized + dropFirst()
     }
 
@@ -243,174 +249,5 @@ extension StringProtocol {
     var moduleNameInImport: String {
         guard self.hasPrefix(String.importSpace) else { return "" }
         return self.dropFirst(String.importSpace.count).trimmingCharacters(in: .whitespaces)
-    }
-}
-
-extension TokenKind {
-    init?(keyword: String) {
-        switch keyword {
-        case "associatedtype":
-          self = .associatedtypeKeyword
-        case "class":
-          self = .classKeyword
-        case "deinit":
-          self = .deinitKeyword
-        case "enum":
-          self = .enumKeyword
-        case "extension":
-          self = .extensionKeyword
-        case "func":
-          self = .funcKeyword
-        case "import":
-          self = .importKeyword
-        case "init":
-          self = .initKeyword
-        case "inout":
-          self = .inoutKeyword
-        case "let":
-          self = .letKeyword
-        case "operator":
-          self = .operatorKeyword
-        case "precedencegroup":
-          self = .precedencegroupKeyword
-        case "protocol":
-          self = .protocolKeyword
-        case "struct":
-          self = .structKeyword
-        case "subscript":
-          self = .subscriptKeyword
-        case "typealias":
-          self = .typealiasKeyword
-        case "var":
-          self = .varKeyword
-        case "fileprivate":
-          self = .fileprivateKeyword
-        case "internal":
-          self = .internalKeyword
-        case "private":
-          self = .privateKeyword
-        case "public":
-          self = .publicKeyword
-        case "static":
-          self = .staticKeyword
-        case "defer":
-          self = .deferKeyword
-        case "if":
-          self = .ifKeyword
-        case "guard":
-          self = .guardKeyword
-        case "do":
-          self = .doKeyword
-        case "repeat":
-          self = .repeatKeyword
-        case "else":
-          self = .elseKeyword
-        case "for":
-          self = .forKeyword
-        case "in":
-          self = .inKeyword
-        case "while":
-          self = .whileKeyword
-        case "return":
-          self = .returnKeyword
-        case "break":
-          self = .breakKeyword
-        case "continue":
-          self = .continueKeyword
-        case "fallthrough":
-          self = .fallthroughKeyword
-        case "switch":
-          self = .switchKeyword
-        case "case":
-          self = .caseKeyword
-        case "default":
-          self = .defaultKeyword
-        case "where":
-          self = .whereKeyword
-        case "catch":
-          self = .catchKeyword
-        case "throw":
-          self = .throwKeyword
-        case "as":
-          self = .asKeyword
-        case "Any":
-          self = .anyKeyword
-        case "false":
-          self = .falseKeyword
-        case "is":
-          self = .isKeyword
-        case "nil":
-          self = .nilKeyword
-        case "rethrows":
-          self = .rethrowsKeyword
-        case "super":
-          self = .superKeyword
-        case "self":
-          self = .selfKeyword
-        case "Self":
-          self = .capitalSelfKeyword
-        case "true":
-          self = .trueKeyword
-        case "try":
-          self = .tryKeyword
-        case "throws":
-          self = .throwsKeyword
-        case "__FILE__":
-          self = .__file__Keyword
-        case "__LINE__":
-          self = .__line__Keyword
-        case "__COLUMN__":
-          self = .__column__Keyword
-        case "__FUNCTION__":
-          self = .__function__Keyword
-        case "__DSO_HANDLE__":
-          self = .__dso_handle__Keyword
-        case "_":
-          self = .wildcardKeyword
-        case "#keyPath":
-          self = .poundKeyPathKeyword
-        case "#line":
-          self = .poundLineKeyword
-        case "#selector":
-          self = .poundSelectorKeyword
-        case "#file":
-          self = .poundFileKeyword
-        case "#fileID":
-          self = .poundFileIDKeyword
-        case "#filePath":
-          self = .poundFilePathKeyword
-        case "#column":
-          self = .poundColumnKeyword
-        case "#function":
-          self = .poundFunctionKeyword
-        case "#dsohandle":
-          self = .poundDsohandleKeyword
-        case "#assert":
-          self = .poundAssertKeyword
-        case "#sourceLocation":
-          self = .poundSourceLocationKeyword
-        case "#warning":
-          self = .poundWarningKeyword
-        case "#error":
-          self = .poundErrorKeyword
-        case "#if":
-          self = .poundIfKeyword
-        case "#else":
-          self = .poundElseKeyword
-        case "#elseif":
-          self = .poundElseifKeyword
-        case "#endif":
-          self = .poundEndifKeyword
-        case "#available":
-          self = .poundAvailableKeyword
-        case "#fileLiteral":
-          self = .poundFileLiteralKeyword
-        case "#imageLiteral":
-          self = .poundImageLiteralKeyword
-        case "#colorLiteral":
-          self = .poundColorLiteralKeyword
-        default:
-          return nil
-        }
     }
 }
