@@ -19,8 +19,8 @@ import MockoloFramework
 import ArgumentParser
 
 
-struct Executor: ParsableCommand {
-    static var configuration = CommandConfiguration(commandName: "mockolo", abstract: "Mockolo: Swift mock generator.")
+public struct Executor: ParsableCommand {
+    public static var configuration = CommandConfiguration(commandName: "mockolo", abstract: "Mockolo: Swift mock generator.")
 
     let defaultTimeout: Int
 
@@ -130,7 +130,7 @@ struct Executor: ParsableCommand {
           help: "If set, a common template function will be called from all functions in mock classes (default is set to false).")
     private var useTemplateFunc: Bool = false
 
-    init() {
+    public init() {
         self.defaultTimeout = 20
     }
 
@@ -145,7 +145,7 @@ struct Executor: ParsableCommand {
         return FileManager.default.currentDirectoryPath + "/" + path
     }
 
-    mutating func validate() throws {
+    public mutating func validate() throws {
         guard Executor.validLoggingLevels.contains(loggingLevel) else {
             throw ValidationError("Please specify a valid logging level in the range: \(Executor.validLoggingLevels)")
         }
@@ -169,7 +169,7 @@ struct Executor: ParsableCommand {
     private var srcDirs: [String] = []
     private var srcs: [String] = []
 
-    mutating func run() throws {
+    public mutating func run() throws {
         let shouldOutputRunStatusMessages: Bool = loggingLevel < 3
 
         if shouldOutputRunStatusMessages {
